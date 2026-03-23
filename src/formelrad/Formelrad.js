@@ -13,19 +13,24 @@ export default function Formelrad() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log("handleSubmit")
+        console.log("calculate")
+
+        // Kombination aus beiden Logiken
         if (values.u === "" && values.i === "") {
-            /*calculate u and i */
-            setValues(values => ({...values, u: Math.sqrt(values.p * values.r)}));
-            setValues(values => ({...values, i: Math.sqrt(values.p / values.r)}));
-        } else if (values.u === "" && values.r === "") {
-            /*calculate u and r */
-            setValues(values => ({...values, u: values.p / values.i}));
-            setValues(values => ({...values, r: values.p / values.i / values.i}));
-        } else if (values.u === "" && values.p === "") {
-            /*calculate u and p */
-            setValues(values => ({...values, u: values.i * values.r}));
-            setValues(values => ({...values, p: values.i * values.i * values.r}));
+            setValues(v => ({...v, u: Math.sqrt(v.p * v.r)}));
+            setValues(v => ({...v, i: Math.sqrt(v.p / v.r)}));
+        }
+        else if (values.i === "" && values.r === "") {
+            setValues(v => ({...v, i: v.p / v.u}));
+            setValues(v => ({...v, r: v.u * v.u / v.p}));
+        }
+        else if (values.i === "" && values.p === "") {
+            setValues(v => ({...v, i: v.u / v.r}));
+            setValues(v => ({...v, p: v.u * v.u / v.r}));
+        }
+        else {
+            setValues(v => ({...v, r: v.u / v.i}));
+            setValues(v => ({...v, p: v.u * v.i}));
         }
     }
 
@@ -37,10 +42,10 @@ export default function Formelrad() {
                     <img src={formelrad} width="200" alt="Formelrad"/>
                 </header>
                 <form onSubmit={handleSubmit}>
-                    <InputField color={"black"} value={values.u} label="Spannung" handleChange={e => {setValues(values => ({...values, u: e.target.value}))}} />
-                    <InputField color={"black"} value={values.i} label="Stromstärke" handleChange={e => {setValues(values => ({...values, i: e.target.value}))}} />
-                    <InputField color={"black"} value={values.r} label="Widerstand" handleChange={e => {setValues(values => ({...values, r: e.target.value}))}} />
-                    <InputField color={"black"} value={values.p} label="Leistung" handleChange={e => {setValues(values => ({...values, p: e.target.value}))}} />
+                    <InputField color={"black"} value={values.u} label="Spannung" handleChange={e => {setValues(v => ({...v, u: e.target.value}))}} />
+                    <InputField color={"black"} value={values.i} label="Stromstärke" handleChange={e => {setValues(v => ({...v, i: e.target.value}))}} />
+                    <InputField color={"black"} value={values.r} label="Widerstand" handleChange={e => {setValues(v => ({...v, r: e.target.value}))}} />
+                    <InputField color={"black"} value={values.p} label="Leistung" handleChange={e => {setValues(v => ({...v, p: e.target.value}))}} />
                     <button type="submit">Calculate</button>
                 </form>
             </section>
